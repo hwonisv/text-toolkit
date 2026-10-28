@@ -1,71 +1,54 @@
-# text-toolkit README
+# Text Toolkit
 
-This is the README for your extension "text-toolkit". After writing up a brief description, we recommend including the following sections.
+**Автор:** Соболева Василиса Сергеевна, группа М3114  
+**Лабораторная работа №3. Создание плагина**
 
-## Features
+## Описание
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+**Text Toolkit** — расширение для Visual Studio Code с небольшим набором инструментов для работы с текстом: подсчёт статистики документа, счётчик слов в строке состояния, преобразование регистра идентификаторов и вставка текущей даты.
 
-For example if there is an image subfolder under your extension project workspace:
+Расширение написано на TypeScript с использованием VS Code Extension API и собирается с помощью esbuild.
 
-\!\[feature X\]\(images/feature-x.png\)
+## Возможности
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+| Команда (Ctrl+Shift+P) | Что делает |
+|---|---|
+| `Text Toolkit: Show Statistics` | Показывает уведомление с числом строк, слов и символов в активном файле |
+| `Text Toolkit: To snake_case` | Преобразует выделенный текст в `snake_case` (`HelloWorldText` → `hello_world_text`) |
+| `Text Toolkit: To camelCase` | Преобразует выделенный текст в `camelCase` (`hello_world_text` → `helloWorldText`) |
+| `Text Toolkit: Insert Current Date` | Вставляет текущую дату в позицию курсора (формат `дд.мм.гггг`) |
 
-## Requirements
+Дополнительно: в правой части строки состояния отображается счётчик слов («Слов: N») для активного файла. Он обновляется при каждом изменении текста и при переключении между файлами.
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+Команды преобразования работают с несколькими выделениями одновременно.
 
-## Extension Settings
+## Установка и запуск (режим разработки)
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+Требуется Node.js 18.19 или новее и VS Code.
 
-For example:
+```bash
+git clone https://github.com/hwonisv/text-toolkit.git
+cd text-toolkit
+npm install
+npm run compile
+code --extensionDevelopmentPath="$PWD"
+```
 
-This extension contributes the following settings:
+В открывшемся окне `[Extension Development Host]` создайте файл (Ctrl+N), введите текст — в строке состояния появится счётчик слов. Команды вызываются через палитру команд (Ctrl+Shift+P) по префиксу `Text Toolkit`.
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+Также проект можно открыть в VS Code и запустить отладку через пункт `Run Extension` (F5).
 
-## Known Issues
+## Упаковка в .vsix
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+```bash
+npm install -g @vscode/vsce
+vsce package
+```
 
-## Release Notes
+Полученный файл `.vsix` устанавливается через панель Extensions → «…» → Install from VSIX.
 
-Users appreciate release notes as you update your extension.
+## Структура проекта
 
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+- `package.json` — манифест расширения (команды, событие активации, точка входа);
+- `src/extension.ts` — исходный код: функции `activate()` и `deactivate()`, обработчики команд;
+- `esbuild.js` — сценарий сборки в `dist/extension.js`.
